@@ -1,0 +1,3 @@
+[submodule "vue-torrent"]
+	path = vue-torrent
+	url = git@github.com:WDaan/VueTorrent.git
