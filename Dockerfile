@@ -11,4 +11,4 @@ RUN npm install -g serve
 COPY --from=build /app/vuetorrent/public .
 EXPOSE 3000
 
-CMD serve -s vuetorrent/public
+CMD serve -s .
