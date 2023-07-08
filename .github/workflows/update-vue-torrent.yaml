@@ -15,7 +15,7 @@ jobs:
         id: git-get-release
         uses: cardinalby/git-get-release-action@1.2.4
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           repo: WDaan/VueTorrent
           latest: true
