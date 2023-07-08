@@ -53,6 +53,7 @@ jobs:
           echo "Current commitish: $(git rev-parse HEAD)"
 
       - name: Commit changes
+        if: steps.compare.outputs.should_update == 'true'
         run: |
           git diff
           git config user.name "GitHub Actions"
@@ -62,6 +63,7 @@ jobs:
           git push origin ${{ github.ref_name }}
 
       - name: Tag
+        if: steps.compare.outputs.should_update == 'true'
         run: |
           git tag ${{ steps.git-get-release.outputs.tag_name }}
           git push origin ${{ steps.git-get-release.outputs.tag_name }}
