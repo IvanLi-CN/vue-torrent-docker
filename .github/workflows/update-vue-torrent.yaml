@@ -49,6 +49,7 @@ jobs:
         run: |
           git config user.name "GitHub Actions"
           git config user.email "bot@noreply.github.com"
+          git diff
           git add .
           git commit -m "Update to ${{ steps.git-get-release.outputs.tag_name }}"
           git push origin ${{ steps.git-get-release.outputs.tag_name }}
