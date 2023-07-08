@@ -1,0 +1,48 @@
+name: Update VueTorrent
+
+on:
+  schedule:
+  - cron: "0 2 * * *"
+  # Allows you to run this workflow manually from the Actions tab or through HTTP API
+  workflow_dispatch:
+
+jobs:
+
+  try-update-vuetorrent:
+    runs-on: ubuntu-latest
+    steps:
+      - name: git-get-release-action
+        id: git-get-release
+        uses: cardinalby/git-get-release-action@1.2.4
+        with:
+          repo: WDaan/VueTorrent
+          latest: true
+
+      - name: Checkout repository
+        uses: actions/checkout@v3.5.3
+        with:
+          submodules: true
+
+      - name: Get current commitish
+        id: get-current-commitish
+        run: |
+          cd vue-torrent
+          echo "Current commitish: $(git rev-parse HEAD)"
+          echo "::set-output name=current_commitish::$(git rev-parse HEAD)"
+
+      - name: Compare versions
+        id: compare
+        run: |
+          echo "Current version: ${{ steps.git-get-release.outputs.tag_name }}"
+          echo "::set-output name=should_update::${{ steps.git-get-release.outputs.target_commitish != steps.get-current-commitish.outputs.current_commitish }}"
+
+      - name: Update
+        if: steps.compare.outputs.should_update == 'true'
+        run: |
+          cd vue-torrent
+          git config user.name "GitHub Actions"
+          git config user.email "bot@noreply.github.com"
+          git checkout -b ${{ steps.git-get-release.outputs.tag_name }}
+          git add .
+          git commit -m "Update to ${{ steps.git-get-release.outputs.tag_name }}"
+          git push origin ${{ steps.git-get-release.outputs.tag_name }}
