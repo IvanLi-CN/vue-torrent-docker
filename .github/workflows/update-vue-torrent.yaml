@@ -42,13 +42,8 @@ jobs:
         if: steps.compare.outputs.should_update == 'true'
         working-directory: ./vue-torrent
         run: |
-          pwd
-          ls
-          git log
           git fetch --depth=1 origin ${{ steps.git-get-release.outputs.tag_name }}
           git checkout -b ${{ steps.git-get-release.outputs.tag_name }} ${{ steps.git-get-release.outputs.target_commitish }}
-          echo "Current commitish: $(git rev-parse HEAD)"
-          git log
           git reset --hard HEAD
           echo "Current commitish: $(git rev-parse HEAD)"
 
