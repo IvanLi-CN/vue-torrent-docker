@@ -60,3 +60,8 @@ jobs:
           git add .
           git commit -m "Update to ${{ steps.git-get-release.outputs.tag_name }}"
           git push origin ${{ github.ref_name }}
+
+      - name: Tag
+        run: |
+          git tag ${{ steps.git-get-release.outputs.tag_name }}
+          git push origin ${{ steps.git-get-release.outputs.tag_name }}
