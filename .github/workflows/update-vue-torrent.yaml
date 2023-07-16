@@ -30,7 +30,7 @@ jobs:
         run: |
           cd vue-torrent
           echo "Current commitish: $(git rev-parse HEAD)"
-          echo "{current_commitish}=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+          echo "current_commitish=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
       - name: Compare versions
         id: compare
@@ -38,7 +38,7 @@ jobs:
           echo "Lastest version: ${{ steps.git-get-release.outputs.tag_name }}"
           echo "Lastest commitish: ${{ steps.git-get-release.outputs.target_commitish }}"
           echo "Need update: ${{ steps.git-get-release.outputs.target_commitish != steps.get-current-commitish.outputs.current_commitish }}"
-          echo "{should_update}=${{ steps.git-get-release.outputs.target_commitish != steps.get-current-commitish.outputs.current_commitish }}" >> $GITHUB_OUTPUT
+          echo "should_update=${{ steps.git-get-release.outputs.target_commitish != steps.get-current-commitish.outputs.current_commitish }}" >> $GITHUB_OUTPUT
 
       - name: Update
         if: steps.compare.outputs.should_update == 'true'
