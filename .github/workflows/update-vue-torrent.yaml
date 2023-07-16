@@ -52,6 +52,9 @@ jobs:
       - name: Commit changes
         if: steps.compare.outputs.should_update == 'true'
         run: |
+          echo $COMMIT_KEY > /tmp/commit_key
+          git config core.sshCommand "ssh -i /tmp/commit_key"
+
           git diff
           git config user.name "GitHub Actions"
           git config user.email "bot@noreply.github.com"
@@ -62,5 +65,8 @@ jobs:
       - name: Tag
         if: steps.compare.outputs.should_update == 'true'
         run: |
+          echo $COMMIT_KEY > /tmp/commit_key
+          git config core.sshCommand "ssh -i /tmp/commit_key"
+          
           git tag ${{ steps.git-get-release.outputs.tag_name }}
           git push origin ${{ steps.git-get-release.outputs.tag_name }}
