@@ -35,7 +35,9 @@ jobs:
       - name: Compare versions
         id: compare
         run: |
-          echo "Current version: ${{ steps.git-get-release.outputs.tag_name }}"
+          echo "Lastest version: ${{ steps.git-get-release.outputs.tag_name }}"
+          echo "Lastest commitish: ${{ steps.git-get-release.outputs.target_commitish }}"
+          echo "Need update: ${{ steps.git-get-release.outputs.target_commitish != steps.get-current-commitish.outputs.current_commitish }}"
           echo "{should_update}=${{ steps.git-get-release.outputs.target_commitish != steps.get-current-commitish.outputs.current_commitish }}" >> $GITHUB_OUTPUT
 
       - name: Update
