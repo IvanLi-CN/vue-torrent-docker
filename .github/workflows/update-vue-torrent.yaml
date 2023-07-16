@@ -49,12 +49,13 @@ jobs:
           git reset --hard HEAD
           echo "Current commitish: $(git rev-parse HEAD)"
 
+      - uses: webfactory/ssh-agent@v0.7.0
+        with:
+            ssh-private-key: ${{ secrets.COMMIT_KEY }}
+
       - name: Commit changes
         if: steps.compare.outputs.should_update == 'true'
         run: |
-          echo '${{ secrets.COMMIT_KEY }}' > /tmp/commit_key
-          export GIT_SSH_COMMAND="ssh -i /tmp/commit_key -F /dev/null"
-
           git diff
           git config user.name "GitHub Actions"
           git config user.email "bot@noreply.github.com"
@@ -65,8 +66,5 @@ jobs:
       - name: Tag
         if: steps.compare.outputs.should_update == 'true'
         run: |
-          echo '${{ secrets.COMMIT_KEY }}' > /tmp/commit_key
-          export GIT_SSH_COMMAND="ssh -i /tmp/commit_key -F /dev/null"
-
           git tag ${{ steps.git-get-release.outputs.tag_name }}
           git push origin ${{ steps.git-get-release.outputs.tag_name }}
