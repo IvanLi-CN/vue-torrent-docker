@@ -52,8 +52,8 @@ jobs:
       - name: Commit changes
         if: steps.compare.outputs.should_update == 'true'
         run: |
-          echo $COMMIT_KEY > /tmp/commit_key
-          git config core.sshCommand "ssh -i /tmp/commit_key"
+          echo '${{ secrets.COMMIT_KEY }}' > /tmp/commit_key
+          export GIT_SSH_COMMAND="ssh -i /tmp/commit_key -F /dev/null"
 
           git diff
           git config user.name "GitHub Actions"
@@ -65,8 +65,8 @@ jobs:
       - name: Tag
         if: steps.compare.outputs.should_update == 'true'
         run: |
-          echo $COMMIT_KEY > /tmp/commit_key
-          git config core.sshCommand "ssh -i /tmp/commit_key"
-          
+          echo '${{ secrets.COMMIT_KEY }}' > /tmp/commit_key
+          export GIT_SSH_COMMAND="ssh -i /tmp/commit_key -F /dev/null"
+
           git tag ${{ steps.git-get-release.outputs.tag_name }}
           git push origin ${{ steps.git-get-release.outputs.tag_name }}
